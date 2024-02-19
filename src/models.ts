@@ -28,7 +28,7 @@ export const createPlateau = (): Plateau => {
             [null, null, null, null, null],
         ],
         addRover: (name: string): string => {
-            const rover: Rover = {name: 'Rover 1', direction: 'N'};
+            const rover: Rover = {name: name, direction: 'N'};
             plateau.grid[0][0] =  rover;
 
             for (const [rowIndex, row] of plateau.grid.entries()) {
