@@ -1,7 +1,9 @@
-export type Moves = "L" | "M" | "R";
+export type Moves = 'L' | 'M' | 'R';
+export type Direction = 'N' | 'E' | 'S' | 'W';
 
 export type Rover = {
     name: string;
+    direction: Direction;
 };
 
 // Fixed 5 x 5 array
@@ -16,10 +18,6 @@ export type Plateau = {
     addRover: (name: string) => string;
 };
 
-export const addRover = (name: string): string => {
-    return "";
-};
-
 export const createPlateau = (): Plateau => {
     const plateau: Plateau = {
         grid: [
@@ -29,7 +27,17 @@ export const createPlateau = (): Plateau => {
             [null, null, null, null, null],
             [null, null, null, null, null],
         ],
-        addRover: addRover,
+        addRover: (name: string): string => {
+            const rover: Rover = {name: 'Rover 1', direction: 'N'};
+            plateau.grid[0][0] =  rover;
+
+            for (const [rowIndex, row] of plateau.grid.entries()) {
+                let colIndex: number = row.findIndex(rover => rover?.name === 'Rover 1');
+                if (colIndex !== -1)
+                    return `${rowIndex} ${colIndex} ${rover.direction}`                
+            }
+            return 'Rover 1';
+        }
     };
     return plateau;
 };
