@@ -1,4 +1,4 @@
-import { Plateau, GRIDSIZE, createPlateau, Rover } from '../src/models';
+import { Plateau, GRIDSIZE, createPlateau, Rover, Direction, Position } from '../src/models';
 
 describe('Initialise grid with a 5 x 5 grid', () => {
   it('should return 5x5 containing nulls array', () => {
@@ -18,7 +18,8 @@ describe('I can add a rover to 0,0 position facing N', () => {
 
     const expected: string = '0 0 N';
 
-    const result: string | undefined = plateau.addRover('Rover 1');
+    const rover: (Rover & Position) | undefined = plateau.addRover('Rover 1');
+    const result: string | undefined = `${rover?.x} ${rover?.y} ${rover?.direction}`;
 
     expect(result).toBe(expected);
   });
@@ -63,15 +64,33 @@ describe('I can add more than one rover to the plateau ', () => {
     expect(result).toBe(expected);
   });
 
-  it('should return 0 0 N, 0 1 N respectively', () => {
+  it('should return 0 0 N, 1 0 N respectively', () => {
     const plateau: Plateau = createPlateau();
 
     const expected1: string = '0 0 N';
-    const expected2: string = '0 1 N';
+    const expected2: string = '1 0 N';
 
-    let result: string | undefined = plateau.addRover('Rover 1');
-    expect(result).toBe(expected1);
-    result = plateau.addRover('Rover 2');
-    expect(result).toBe(expected2);
+    const rover1: (Rover & Position) | undefined = plateau.addRover('Rover 1');
+    const result1: string | undefined = `${rover1?.x} ${rover1?.y} ${rover1?.direction}`;
+
+    expect(result1).toBe(expected1);
+    const rover2: (Rover & Position) | undefined = plateau.addRover('Rover 2');
+    const result2: string | undefined = `${rover2?.x} ${rover2?.y} ${rover2?.direction}`;
+
+    expect(result2).toBe(expected2);
+  });
+});
+
+describe('Move rover North', () => {
+  const plateau: Plateau = createPlateau();
+
+  const rover1: Rover | undefined = plateau.addRover('Rover 1');
+
+  it('should have a position 0 1 N', () => {
+    const expected: Position = { x: 0, y: 1, direction: 'N' };
+
+    const position: Position | undefined = rover1?.move();
+
+    expect(position).toEqual(expected);
   });
 });
