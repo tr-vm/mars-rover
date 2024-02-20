@@ -1,6 +1,6 @@
 export type Moves = 'L' | 'M' | 'R';
 export type Direction = 'N' | 'E' | 'S' | 'W';
-export type Heading = { direction: Direction; degrees: 0 } | { direction: Direction; degrees: 90 } | { direction: Direction; degrees: 180 } | { direction: 'W'; degrees: 270 };
+export type Heading = { direction: Direction; degrees: 0 | 90 | 180 | 270 };
 export type Position = {
   x: number;
   y: number;
@@ -44,19 +44,15 @@ export const createPlateau = (): Plateau => {
     findRoverPos: (name: string): Position | undefined => {
       for (const [rowIndex, row] of plateau.grid.entries()) {
         let colIndex: number = row.findIndex((rover) => rover?.name === name);
-        if (plateau.grid[rowIndex][colIndex]?.heading) {
+        if (colIndex !== -1) {
           const heading: Heading | undefined = plateau.grid[rowIndex][colIndex]?.heading;
           return { x: colIndex, y: rowIndex, heading: heading };
         }
       }
     },
     getRovers: (): (Rover | null)[] => {
-      const rovers: (Rover | null)[] = []; // TODO: Remove null
-      for (const row of plateau.grid) {
-        for (const cell of row) {
-          if (cell !== null) rovers.push(cell);
-        }
-      }
+      const rovers: (Rover | null)[] = plateau.grid.flat().filter((cell) => cell !== null); // TODO: Remove null
+
       return rovers;
     },
     // isCellAvailable: (x: number, y:number) => {
