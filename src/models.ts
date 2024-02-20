@@ -12,6 +12,7 @@ export const GRIDSIZE: number = 5;
 export type Rover = {
   name: string;
   heading: Heading;
+  plateau: Plateau;
 };
 
 // Fixed 5x5 2-D array
@@ -31,7 +32,7 @@ export const createPlateau = (): Plateau => {
       const position: Position | undefined = plateau.findRoverPos(name);
       if (position) throw 'Duplicate Rover added';
 
-      const rover: Rover = { name: name, heading: { direction: 'N', degrees: 0 } };
+      const rover: Rover = { name: name, plateau: plateau, heading: { direction: 'N', degrees: 0 } };
       for (const [rowIndex, row] of plateau.grid.entries()) {
         const colIndex: number = row?.findIndex((cell) => cell == null);
         if (colIndex > -1) {
@@ -58,6 +59,9 @@ export const createPlateau = (): Plateau => {
       }
       return rovers;
     },
+    // isCellAvailable: (x: number, y:number) => {
+
+    // }
   };
   return plateau;
 };

@@ -14,11 +14,11 @@ describe('Initialise grid with a 5 x 5 grid', () => {
 
 describe('I can add a rover to 0,0 position facing N', () => {
   it('should return 0 0 N', () => {
-    const emptyPlateau: Plateau = createPlateau();
+    const plateau: Plateau = createPlateau();
 
     const expected: string = '0 0 N';
 
-    const result: string | undefined = emptyPlateau.addRover('Rover 1');
+    const result: string | undefined = plateau.addRover('Rover 1');
 
     expect(result).toBe(expected);
   });
@@ -61,5 +61,17 @@ describe('I can add more than one rover to the plateau ', () => {
     const result: boolean = rovers.every((rover) => rover?.name === names[0] || rover?.name === names[1]);
 
     expect(result).toBe(expected);
+  });
+
+  it('should return 0 0 N, 0 1 N respectively', () => {
+    const plateau: Plateau = createPlateau();
+
+    const expected1: string = '0 0 N';
+    const expected2: string = '0 1 N';
+
+    let result: string | undefined = plateau.addRover('Rover 1');
+    expect(result).toBe(expected1);
+    result = plateau.addRover('Rover 2');
+    expect(result).toBe(expected2);
   });
 });
