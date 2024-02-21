@@ -4,7 +4,7 @@ export type Direction = 'N' | 'E' | 'S' | 'W';
 export type Position = {
   x: number;
   y: number;
-  direction: Direction | undefined; // TODO: get rid of the undefined
+  direction: Direction;
 };
 
 export const GRIDSIZE: number = 5;
@@ -12,7 +12,7 @@ export const GRIDSIZE: number = 5;
 export type Rover = {
   name: string;
   direction: Direction;
-  plateau: Plateau;
+  plateau: Plateau; // Same with this, bad decision. See README
   move: () => Position | undefined;
   getPosition: () => Position | undefined;
   changeDirection: (directionChange: DirectionChange) => Position | undefined;
@@ -21,8 +21,8 @@ export type Rover = {
 
 // Fixed 5x5 2-D array
 export type Plateau = {
-  grid: (Rover | null)[][];
-  addRover: (name: string) => (Rover & Position) | undefined;
+  grid: (Rover | null)[][]; // With hindsight this was a bad decisiom. See more in README.
+  addRover: (name: string, startPosition?: Position | undefined) => (Rover & Position) | undefined;
   findRoverPos: (name: string) => Position | undefined;
   getRovers: () => (Rover | null)[];
   getRoverPosition: (rover: Rover) => Position | undefined;
@@ -69,7 +69,7 @@ const moveRover = (rover: Rover, plateau: Plateau, currentPosition: Position): P
       if (currentPosition.x - 1 >= 0) {
         currentPosition.x--;
         newXPos = currentPosition.x;
-        tryMoveRover(newXPos, newYPos);
+        tryMoveRover(newXPos, currentPosition.y);
       }
       break;
   }
@@ -86,11 +86,18 @@ export const createPlateau = (): Plateau => {
     grid: Array(GRIDSIZE)
       .fill(null)
       .map(() => Array(GRIDSIZE).fill(null)),
-    addRover: (name: string): (Rover & Position) | undefined => {
+    addRover: (name: string, startPosition?: Position): (Rover & Position) | undefined => {
       const position: Position | undefined = plateau.findRoverPos(name);
       if (position) throw 'Duplicate Rover added';
 
       const rover: Rover = createRover(name, plateau);
+
+      if (startPosition) {
+        rover.direction = startPosition.direction;
+        plateau.grid[startPosition.y][startPosition.x] = rover;
+        return { ...rover, ...startPosition };
+      }
+
       for (const [rowIndex, row] of plateau.grid.entries()) {
         const colIndex: number = row?.findIndex((cell) => cell == null);
         if (colIndex > -1) {
@@ -104,7 +111,7 @@ export const createPlateau = (): Plateau => {
         let colIndex: number = row.findIndex((rover) => rover?.name === name);
         if (colIndex !== -1) {
           const direction: Direction | undefined = plateau.grid[rowIndex][colIndex]?.direction;
-          return { x: colIndex, y: rowIndex, direction: direction };
+          if (direction) return { x: colIndex, y: rowIndex, direction: direction };
         }
       }
     },
@@ -116,7 +123,7 @@ export const createPlateau = (): Plateau => {
     getRoverPosition: (rover: Rover): Position | undefined => {
       for (const [rowIndex, row] of plateau.grid.entries()) {
         const colIndex: number = row?.findIndex((cell) => cell === rover);
-        if (colIndex >= -1) return { x: colIndex, y: rowIndex, direction: rover.direction };
+        if (colIndex > -1) return { x: colIndex, y: rowIndex, direction: rover.direction };
       }
     },
     moveRover: (rover: Rover): Position | undefined => {

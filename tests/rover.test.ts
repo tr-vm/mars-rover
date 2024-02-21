@@ -236,6 +236,45 @@ describe('Move a Rover by a list of movements RMMMNMMM', () => {
   });
 });
 
+describe('Move a Rover by a list of movements LMLMLMLMM', () => {
+  const plateau: Plateau = createPlateau();
+
+  const rover1: (Rover & Position) | undefined = plateau.addRover('Rover 1', { x: 1, y: 2, direction: 'N' });
+
+  it('rover should be at 1 2 N ', () => {
+    expect(rover1?.x).toBe(1);
+    expect(rover1?.y).toBe(2);
+    expect(rover1?.direction).toBe('N');
+  });
+
+  it('position should be at 1 3 N', () => {
+    const expected: Position = { x: 1, y: 3, direction: 'N' };
+
+    const position: Position | undefined = rover1?.moveByCmdList('LMLMLMLMM');
+
+    expect(position).toEqual(expected);
+  });
+});
+
+describe('Move a Rover by a list of movements MMRMMRMRRM', () => {
+  const plateau: Plateau = createPlateau();
+  const rover2: (Rover & Position) | undefined = plateau.addRover('Rover 1', { x: 3, y: 3, direction: 'E' });
+
+  it('rover should be at 3 3 E ', () => {
+    expect(rover2?.x).toBe(3);
+    expect(rover2?.y).toBe(3);
+    expect(rover2?.direction).toBe('E');
+  });
+
+  it('position should be at 5 1 E', () => {
+    const expected: Position = { x: 5, y: 1, direction: 'E' };
+
+    const position: Position | undefined = rover2?.moveByCmdList('MMRMMRMRRM');
+
+    expect(position).toEqual(expected);
+  });
+});
+
 describe('test collision detection', () => {
   const plateau: Plateau = createPlateau();
   const rover1: (Rover & Position) | undefined = plateau.addRover('Rover 1');
