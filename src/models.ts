@@ -34,39 +34,50 @@ const moveRover = (rover: Rover, plateau: Plateau, currentPosition: Position): P
   let newXPos: number = -1;
   plateau.grid[currentPosition.y][currentPosition.x] = null; // This is bad, and indicates a suboptimal representation of the grid
   //  We should add to the grid first then remove
+  const tryMoveRover = (x: number, y: number) => {
+    if (!plateau.grid[y] || !plateau.grid[y][x]) {
+      if (!plateau.grid[y]) plateau.grid[y] = [];
+      plateau.grid[y][x] = rover;
+    } else {
+      throw `Cannot move ${rover.name}`;
+    }
+  };
+
   switch (rover.direction) {
     case 'N':
       if (currentPosition.y + 1 <= plateau.grid.length) {
         currentPosition.y++;
         newYPos = currentPosition.y;
-        plateau.grid[newYPos][currentPosition.x] = rover;
+        tryMoveRover(currentPosition.x, newYPos);
       }
       break;
     case 'E':
       if (currentPosition.x + 1 <= plateau.grid[0].length) {
         currentPosition.x++;
         newXPos = currentPosition.x;
-        plateau.grid[currentPosition.y][newXPos] = rover;
+        tryMoveRover(newXPos, currentPosition.y);
       }
       break;
     case 'S':
       if (currentPosition.y - 1 >= 0) {
         currentPosition.y--;
         newYPos = currentPosition.y;
-        plateau.grid[newYPos][currentPosition.x] = rover;
+        tryMoveRover(currentPosition.x, newYPos);
       }
       break;
     case 'W':
       if (currentPosition.x - 1 >= 0) {
         currentPosition.x--;
         newXPos = currentPosition.x;
-        plateau.grid[currentPosition.y][newXPos] = rover;
+        tryMoveRover(newXPos, newYPos);
       }
       break;
   }
 
   if (newXPos !== -1 || newYPos !== -1) {
     return { x: currentPosition.x, y: currentPosition.y, direction: rover.direction };
+  } else {
+    throw `Cannot move "${rover}" beyond Plateau`;
   }
 };
 

@@ -191,11 +191,14 @@ describe('Move two rovers', () => {
   });
 
   it('should have a position 1 1 E, 2 1 S', () => {
-    const expected1: Position = { x: 1, y: 1, direction: 'E' };
+    const expected1: Position = { x: 4, y: 1, direction: 'E' };
     const expected2: Position = { x: 1, y: 2, direction: 'W' };
 
     rover1?.move();
     rover1?.changeDirection('R');
+    rover1?.move();
+    rover1?.move();
+    rover1?.move();
     const position1: Position | undefined = rover1?.move();
 
     rover2?.move();
@@ -230,5 +233,19 @@ describe('Move a Rover by a list of movements RMMMNMMM', () => {
     const position: Position | undefined = rover1?.moveByCmdList('RMMMLMMM');
 
     expect(position).toEqual(expected);
+  });
+});
+
+describe('test collision detection', () => {
+  const plateau: Plateau = createPlateau();
+  const rover1: (Rover & Position) | undefined = plateau.addRover('Rover 1');
+  const rover2: (Rover & Position) | undefined = plateau.addRover('Rover 2');
+
+  it('rover 2 should collide with rover 1', () => {
+    rover1?.move();
+    rover1?.changeDirection('R');
+    rover1?.move();
+
+    expect(() => rover2?.move()).toThrow('Cannot move Rover 2');
   });
 });
