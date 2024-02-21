@@ -81,7 +81,7 @@ describe('I can add more than one rover to the plateau ', () => {
   });
 });
 
-describe('Move rover North', () => {
+describe('Move rover North, then go East, then go North again', () => {
   const plateau: Plateau = createPlateau();
 
   const rover1: Rover | undefined = plateau.addRover('Rover 1');
@@ -93,4 +93,61 @@ describe('Move rover North', () => {
 
     expect(position).toEqual(expected);
   });
+
+  it('should have a position 1 1 E', () => {
+    const expected: Position = { x: 1, y: 1, direction: 'E' };
+
+    let position: Position | undefined = rover1?.changeDirection('E');
+    position = rover1?.move();
+
+    expect(position).toEqual(expected);
+  });
+
+  it('should have a position 2 1 N', () => {
+    const expected: Position = { x: 1, y: 2, direction: 'N' };
+
+    let position: Position | undefined = rover1?.changeDirection('N');
+    position = rover1?.move();
+
+    expect(position).toEqual(expected);
+  });
+});
+
+describe('Change direction', () => {
+  const plateau: Plateau = createPlateau();
+
+  const rover1: Rover | undefined = plateau.addRover('Rover 1');
+
+  it('should have a direction E', () => {
+    const expected: Position = { x: 0, y: 0, direction: 'E' };
+
+    const position: Position | undefined = rover1?.changeDirection('E');
+
+    expect(position).toEqual(expected);
+  });
+
+  it('should have a direction S', () => {
+    const expected: Position = { x: 0, y: 0, direction: 'S' };
+
+    const position: Position | undefined = rover1?.changeDirection('S');
+
+    expect(position).toEqual(expected);
+  });
+
+  it('should have a direction W', () => {
+    const expected: Position = { x: 0, y: 0, direction: 'W' };
+
+    const position: Position | undefined = rover1?.changeDirection('W');
+
+    expect(position).toEqual(expected);
+  });
+
+  it('should have a direction N', () => {
+    const expected: Position = { x: 0, y: 0, direction: 'N' };
+
+    const position: Position | undefined = rover1?.changeDirection('N');
+
+    expect(position).toEqual(expected);
+  });
+  ``;
 });

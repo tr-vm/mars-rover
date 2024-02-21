@@ -30,11 +30,12 @@ export type Plateau = {
 const moveRover = (rover: Rover, plateau: Plateau, currentPosition: Position): Position | undefined => {
   let newYPos: number = -1;
   let newXPos: number = -1;
+  plateau.grid[currentPosition.y][currentPosition.x] = null; // This is bad, and indicates a suboptimal representation of the grid
+  //  We should add to the grid first then remove
   switch (rover.direction) {
     case 'N':
       if (currentPosition.y + 1 <= plateau.grid.length) {
         currentPosition.y++;
-        console.log(currentPosition);
         newYPos = currentPosition.y;
         plateau.grid[newYPos][currentPosition.x] = rover;
       }
@@ -42,8 +43,9 @@ const moveRover = (rover: Rover, plateau: Plateau, currentPosition: Position): P
     case 'E':
       if (currentPosition.x + 1 <= plateau.grid[0].length) {
         currentPosition.x++;
-        newXPos = currentPosition.y;
-        plateau.grid[newYPos][currentPosition.x] = rover;
+        newXPos = currentPosition.x;
+        console.log(currentPosition);
+        plateau.grid[currentPosition.y][newXPos] = rover;
       }
       break;
     case 'S':
@@ -57,13 +59,12 @@ const moveRover = (rover: Rover, plateau: Plateau, currentPosition: Position): P
       if (currentPosition.x - 1 >= 0) {
         currentPosition.x--;
         newXPos = currentPosition.x;
-        plateau.grid[newYPos][currentPosition.x] = rover;
+        plateau.grid[currentPosition.y][newXPos] = rover;
       }
       break;
   }
 
   if (newXPos !== -1 || newYPos !== -1) {
-    plateau.grid[currentPosition.y][currentPosition.x] = null;
     return { x: currentPosition.x, y: currentPosition.y, direction: rover.direction };
   }
 };
