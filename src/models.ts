@@ -1,4 +1,5 @@
 export type Moves = 'L' | 'M' | 'R';
+export type DirectionChange = 'L' | 'R';
 export type Direction = 'N' | 'E' | 'S' | 'W';
 export type Position = {
   x: number;
@@ -14,7 +15,8 @@ export type Rover = {
   plateau: Plateau;
   move: () => Position | undefined;
   getPosition: () => Position | undefined;
-  changeDirection: (direction: Direction) => Position | undefined;
+  changeDirection: (directionChange: DirectionChange) => Position | undefined;
+  moveByCmdList: (movements: string) => Position | undefined;
 };
 
 // Fixed 5x5 2-D array
@@ -44,7 +46,6 @@ const moveRover = (rover: Rover, plateau: Plateau, currentPosition: Position): P
       if (currentPosition.x + 1 <= plateau.grid[0].length) {
         currentPosition.x++;
         newXPos = currentPosition.x;
-        console.log(currentPosition);
         plateau.grid[currentPosition.y][newXPos] = rover;
       }
       break;
@@ -128,10 +129,41 @@ const createRover = (name: string, plateau: Plateau): Rover => {
       const position: Position | undefined = plateau.getRoverPosition(rover);
       if (position) return { x: position.x, y: position.y, direction: rover.direction };
     },
-    changeDirection: (direction: Direction): Position | undefined => {
-      rover.direction = direction;
+    changeDirection: (directionChange: DirectionChange): Position | undefined => {
+      switch (rover.direction) {
+        case 'N':
+          rover.direction = directionChange === 'L' ? 'W' : 'E';
+          break;
+        case 'E':
+          rover.direction = directionChange === 'L' ? 'N' : 'S';
+          break;
+        case 'S':
+          rover.direction = directionChange === 'L' ? 'E' : 'W';
+          break;
+        case 'W':
+          rover.direction = directionChange === 'L' ? 'S' : 'N';
+          break;
+      }
       const position: Position | undefined = rover.getPosition();
       if (position) return position;
+    },
+    moveByCmdList: (cmdList: string): Position | undefined => {
+      const cmds: string[] = cmdList.split('');
+      let position: Position | undefined;
+      cmds.forEach((cmd) => {
+        switch (cmd) {
+          case 'L':
+          case 'R':
+            position = rover.changeDirection(cmd);
+            break;
+          case 'M':
+            position = rover.move();
+            break;
+          default:
+            throw `Invalid move: ${cmd}`;
+        }
+      });
+      return position;
     },
   };
   return rover;

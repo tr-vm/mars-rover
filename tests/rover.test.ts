@@ -1,4 +1,4 @@
-import { Plateau, GRIDSIZE, createPlateau, Rover, Direction, Position } from '../src/models';
+import { Plateau, GRIDSIZE, createPlateau, Rover, Position } from '../src/models';
 
 describe('Initialise grid with a 5 x 5 grid', () => {
   it('should return 5x5 containing nulls array', () => {
@@ -97,16 +97,15 @@ describe('Move rover North, then go East, then go North again', () => {
   it('should have a position 1 1 E', () => {
     const expected: Position = { x: 1, y: 1, direction: 'E' };
 
-    let position: Position | undefined = rover1?.changeDirection('E');
+    let position: Position | undefined = rover1?.changeDirection('R');
     position = rover1?.move();
 
     expect(position).toEqual(expected);
   });
+  it('should have a position 1 0 S', () => {
+    const expected: Position = { x: 1, y: 0, direction: 'S' };
 
-  it('should have a position 2 1 N', () => {
-    const expected: Position = { x: 1, y: 2, direction: 'N' };
-
-    let position: Position | undefined = rover1?.changeDirection('N');
+    let position: Position | undefined = rover1?.changeDirection('R');
     position = rover1?.move();
 
     expect(position).toEqual(expected);
@@ -121,7 +120,7 @@ describe('Change direction', () => {
   it('should have a direction E', () => {
     const expected: Position = { x: 0, y: 0, direction: 'E' };
 
-    const position: Position | undefined = rover1?.changeDirection('E');
+    const position: Position | undefined = rover1?.changeDirection('R');
 
     expect(position).toEqual(expected);
   });
@@ -129,7 +128,23 @@ describe('Change direction', () => {
   it('should have a direction S', () => {
     const expected: Position = { x: 0, y: 0, direction: 'S' };
 
-    const position: Position | undefined = rover1?.changeDirection('S');
+    const position: Position | undefined = rover1?.changeDirection('R');
+
+    expect(position).toEqual(expected);
+  });
+
+  it('should have a direction E', () => {
+    const expected: Position = { x: 0, y: 0, direction: 'E' };
+
+    const position: Position | undefined = rover1?.changeDirection('L');
+
+    expect(position).toEqual(expected);
+  });
+
+  it('should have a direction S', () => {
+    const expected: Position = { x: 0, y: 0, direction: 'S' };
+
+    const position: Position | undefined = rover1?.changeDirection('R');
 
     expect(position).toEqual(expected);
   });
@@ -137,7 +152,15 @@ describe('Change direction', () => {
   it('should have a direction W', () => {
     const expected: Position = { x: 0, y: 0, direction: 'W' };
 
-    const position: Position | undefined = rover1?.changeDirection('W');
+    const position: Position | undefined = rover1?.changeDirection('R');
+
+    expect(position).toEqual(expected);
+  });
+
+  it('should have a direction S', () => {
+    const expected: Position = { x: 0, y: 0, direction: 'S' };
+
+    const position: Position | undefined = rover1?.changeDirection('L');
 
     expect(position).toEqual(expected);
   });
@@ -145,9 +168,67 @@ describe('Change direction', () => {
   it('should have a direction N', () => {
     const expected: Position = { x: 0, y: 0, direction: 'N' };
 
-    const position: Position | undefined = rover1?.changeDirection('N');
+    rover1?.changeDirection('R');
+    const position: Position | undefined = rover1?.changeDirection('R');
 
     expect(position).toEqual(expected);
   });
-  ``;
+});
+
+describe('Move two rovers', () => {
+  const plateau: Plateau = createPlateau();
+
+  const rover1: (Rover & Position) | undefined = plateau.addRover('Rover 1');
+  const rover2: (Rover & Position) | undefined = plateau.addRover('Rover 2');
+
+  it('both rovers should be at 0 0 N and 1 0 N respectively', () => {
+    expect(rover1?.x).toBe(0);
+    expect(rover1?.y).toBe(0);
+    expect(rover1?.direction).toBe('N');
+    expect(rover2?.x).toBe(1);
+    expect(rover2?.y).toBe(0);
+    expect(rover2?.direction).toBe('N');
+  });
+
+  it('should have a position 1 1 E, 2 1 S', () => {
+    const expected1: Position = { x: 1, y: 1, direction: 'E' };
+    const expected2: Position = { x: 1, y: 2, direction: 'W' };
+
+    rover1?.move();
+    rover1?.changeDirection('R');
+    const position1: Position | undefined = rover1?.move();
+
+    rover2?.move();
+    rover2?.move();
+    rover2?.changeDirection('R');
+    rover2?.move();
+    rover2?.changeDirection('R');
+    rover2?.changeDirection('R');
+
+    const position2: Position | undefined = rover2?.move();
+
+    expect(position1).toEqual(expected1);
+
+    expect(position2).toEqual(expected2);
+  });
+});
+
+describe('Move a Rover by a list of movements RMMMNMMM', () => {
+  const plateau: Plateau = createPlateau();
+
+  const rover1: (Rover & Position) | undefined = plateau.addRover('Rover 1');
+
+  it('both rovers should be at 0 0 N ', () => {
+    expect(rover1?.x).toBe(0);
+    expect(rover1?.y).toBe(0);
+    expect(rover1?.direction).toBe('N');
+  });
+
+  it('position should be at 3 3 N', () => {
+    const expected: Position = { x: 3, y: 3, direction: 'N' };
+
+    const position: Position | undefined = rover1?.moveByCmdList('RMMMLMMM');
+
+    expect(position).toEqual(expected);
+  });
 });
