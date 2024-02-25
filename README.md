@@ -21,7 +21,7 @@ With hindsight, representing the grid as a 2-D array is too expensive in size an
   - The Rover would not need a reference to the Plateau. Less memory.
   - Only one for loop to determine the position of a Rover.
   
-``ts
+```ts
     export type Rover = {
         name: string;
         direction: Direction;
@@ -29,14 +29,14 @@ With hindsight, representing the grid as a 2-D array is too expensive in size an
         **position: Position;**
         ...
     };
-``
-``ts
+```
+```ts
     export type Plateau = {
         **grid: (Rover | null)[]; **
         addRover: (name: string, startPosition?: Position | undefined) => (Rover & Position) | undefined;
        ...
     };
-``
+```
 
 - There were some initial attempts to build a UI with [Terminal draw](https://www.npmjs.com/package/command-line-draw).However, there were issues with a package upstream that prevented further progress. I then switched to using HTML canvas and started the scaffold for implementing Web Sockets to send updates of the Grid to the web page. 
 - Finally, I would represent the heading in degrees to represent more fine grained directions i.e. 20 degrees North
