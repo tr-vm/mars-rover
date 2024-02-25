@@ -21,7 +21,7 @@ With hindsight, representing the grid as a 2-D array is too expensive in size an
   - The Rover would not need a reference to the Plateau. Less memory.
   - Only one for loop to determine the position of a Rover.
   
-``
+``ts
     export type Rover = {
         name: string;
         direction: Direction;
@@ -30,7 +30,7 @@ With hindsight, representing the grid as a 2-D array is too expensive in size an
         ...
     };
 ``
-``
+``ts
     export type Plateau = {
         **grid: (Rover | null)[]; **
         addRover: (name: string, startPosition?: Position | undefined) => (Rover & Position) | undefined;
