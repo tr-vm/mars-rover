@@ -1,4 +1,5 @@
-import { Plateau, GRIDSIZE, createPlateau, Rover, Position } from '../src/models';
+import { Plateau, Rover, Position } from '../src/types';
+import { createPlateau, GRIDSIZE } from '../src/models';
 
 describe('Initialise grid with a 5 x 5 grid', () => {
   it('should return 5x5 containing nulls array', () => {
