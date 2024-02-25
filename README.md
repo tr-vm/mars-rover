@@ -29,7 +29,8 @@ With hindsight, representing the grid as a 2-D array is too expensive in size an
         **position: Position;**
         ...
     };
-
+``
+``
     export type Plateau = {
         **grid: (Rover | null)[]; **
         addRover: (name: string, startPosition?: Position | undefined) => (Rover & Position) | undefined;
