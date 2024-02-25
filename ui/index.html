@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mars Rover</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+  </head>
+
+  <body>
+    <div id="main">
+        <canvas id="myCanvas" width="500" height="500"></canvas>
+    </div>
+    <script>
+      const canvas = document.getElementById('myCanvas');
+      const ctx = canvas.getContext('2d');
+  
+      function drawGrid() {
+        const gridSize = 100;
+        const rows = canvas.height / gridSize;
+        const cols = canvas.width / gridSize;
+  
+        for (let i = 0; i < rows; i++) {
+          ctx.beginPath();
+          ctx.moveTo(0, i * gridSize);
+          ctx.lineTo(canvas.width, i * gridSize);
+          ctx.stroke();
+        }
+  
+        for (let j = 0; j < cols; j++) {
+          ctx.beginPath();
+          ctx.moveTo(j * gridSize, 0);
+          ctx.lineTo(j * gridSize, canvas.height);
+          ctx.stroke();
+        }
+      }
+  
+      function drawSquares() {
+        ctx.fillStyle = 'blue';
+        ctx.fillRect(0, 400, 100, 100);
+  
+        ctx.fillStyle = 'red';
+        ctx.fillRect(200, 400, 100, 100);
+      }
+      drawGrid();
+      drawSquares();
+    </script>
+  </body> 
+</html>

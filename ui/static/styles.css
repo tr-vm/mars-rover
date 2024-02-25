@@ -1,0 +1,9 @@
+div#main {
+    margin-left: auto;
+    margin-right: auto;
+    width: 28rem;
+}
+
+canvas {
+  border: 1px solid #000;  
+}
