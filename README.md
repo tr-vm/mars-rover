@@ -5,11 +5,9 @@
 - Add multiple rovers
 - Collision detection
 - Configurable grid size
-
-## Features
-- The grid is represented with a 2-D array.
-- All the types in the "Engine" are represented in *types.ts*. 
-- The tests have an almost 100% coverage of code.
+- The grid is represented with a 2-D array
+- All the types in the "Engine" are represented in *types.ts*.
+- The tests have an almost 100% coverage of code
 
 ## Considerations
 - An objective was to utilize TypeScript types for hinting the properties and behavior of objects (Rover and Plateau) as a type. This involves incorporating literal types to articulate the direction and heading of the Rover.
